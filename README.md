@@ -1,22 +1,22 @@
 # dual402-starter
 
-Paid HTTP API template for AI agents. Accepts both **x402** (Base mainnet USDC) and **MPP** (Tempo USDC) on every route. Deploys to **EigenCompute** with a verifiable build.
+Paid HTTP API template. Accepts x402 and MPP on every route. Deploys verifiably on EigenCompute.
+
+Clone → `./scripts/init.sh` → fill CDP keys → `./scripts/deploy.sh --fresh`. Zero to live paid API in under 10 min.
 
 Built on [`dual402`](https://github.com/mmurrs/dual402).
 
 ## Why use this
 
-Your service gets monetized automatically. No API keys, no billing dashboard, no user accounts — every paid route returns a 402 challenge and the client pays per call in USDC. You set the price per endpoint; you get paid per request to your own wallet. Both x402 (Coinbase) and MPP (Tempo) clients just work on day one, so you don't have to pick a side.
+Your service gets monetized automatically — no API keys, no billing dashboard, no accounts. Every paid route returns a 402; the client pays per call in USDC to your own wallet. Both x402 (Coinbase) and MPP (Tempo) clients work on day one.
 
-On top of that, deploying on EigenCompute gives agents and counterparties something they can't get from AWS or Vercel:
+Deploying on EigenCompute also gives agents and counterparties things they can't get from AWS:
 
-- **Source code verifiability.** The running binary is cryptographically linked to a specific commit in your public repo. Agents can audit exactly what they're paying.
-- **Public attestations.** `[BOOT]` log, `/verify` endpoint, and `verify.eigencloud.xyz` dashboard expose commit SHA, facilitator, and payee wallet as third-party-auditable proof.
-- **Agent commerce primitives.** Your service pays for its own compute, inference, and upstream tool calls (x402/MPP, onchain), with every settlement logged and traceable.
-- **Encrypted memory.** TEE-sealed secrets (CDP keys, upstream API keys) are released only to the measured boot image — your code can read them, no one else can.
-- **Programmatic payouts.** Funds move on rules the counterparty can inspect: fixed per-request price, verifiable settlement hash, fresh merchant wallet scoped to the service.
-
-If you'd be fine on AWS, you probably don't need this. If your service needs to prove to an agent or counterparty that the code charging them is exactly what's on GitHub, this is the fastest path.
+- **Source code verifiability** — the running binary is cryptographically linked to a commit in your public repo.
+- **Public attestations** — `[BOOT]` log, `/verify` endpoint, and verify.eigencloud.xyz expose commit SHA, facilitator, and payee wallet.
+- **Agent commerce** — your service pays for its own compute, inference, and upstream tool calls.
+- **Encrypted memory** — TEE-sealed secrets are released only to the measured boot image.
+- **Programmatic payouts** — fixed per-request price, verifiable settlement hash, merchant wallet scoped to the service.
 
 ## Quickstart
 

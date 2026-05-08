@@ -73,8 +73,8 @@ The `/verify` endpoint and `[BOOT]` log both reflect these at runtime. Don't add
 
 ## Testing
 
-- `npm test` — offline smoke, no server boot, no network
-- CI runs the same smoke plus a live-boot 402 check on Node 20 + 22 (`.github/workflows/ci.yml`)
+- `npm test` — offline smoke with an ephemeral local server boot, no external network
+- CI should run the same smoke plus a live-boot 402 check on Node 22 (`.github/workflows/ci.yml`)
 - Manual 402 probe: `curl -sI http://localhost:8080/<route>` → must return `HTTP/1.1 402` with both `PAYMENT-REQUIRED` and `www-authenticate` headers
 
 ## Deploying

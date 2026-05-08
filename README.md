@@ -10,7 +10,7 @@ Built on [`dual402`](https://github.com/mmurrs/dual402). Protocol references: [x
 
 Your service gets monetized automatically — no API keys, no billing dashboard, no accounts. Every paid route returns a 402; the client pays per call in USDC to your own wallet. Both x402 (Coinbase) and MPP (Tempo) clients work on day one.
 
-Deploying on EigenCompute also gives agents and counterparties things they can't get from AWS:
+Deploying on EigenCompute also gives agents and counterparties things they can't get from standard hosting:
 
 - **Source code verifiability** — the running binary is cryptographically linked to a commit in your public repo.
 - **Public attestations** — `[BOOT]` log, `/verify` endpoint, and verify.eigencloud.xyz expose commit SHA, facilitator, and payee wallet.

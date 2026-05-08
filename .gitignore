@@ -1,5 +1,7 @@
 node_modules/
 dist/
+tmp-*/
+.tmp-*/
 
 # Env files — always gitignored, never commit real secrets
 .env
@@ -8,6 +10,7 @@ dist/
 
 # Local deploy state (wallet addresses, app IDs, etc)
 scripts/.deploy-config
+scripts/.merchant-privkey
 
 # Vercel
 .vercel/

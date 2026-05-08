@@ -78,7 +78,7 @@ function handleHello(req, res) {
   const name =
     (req.method === "POST" ? req.body?.name : req.query?.name) ?? "world";
   res.json({
-    greeting: `Hello, ${String(name).slice(0, 64)} — you paid $0.02.`,
+    greeting: `Hello, ${String(name).slice(0, 64)}. You paid 0.02 USDC.`,
     paid_at: new Date().toISOString(),
   });
 }
@@ -135,7 +135,7 @@ dualDiscovery(app, dual, {
     description:
       "Starter paid API accepting both x402 (Base) and MPP (Tempo) USDC.",
     "x-guidance":
-      "POST /hello with { name } — or GET /hello?name=world. Expect 402 until payment attached.",
+      "POST /hello with { name }. GET /hello?name=world is a query-string alias. Expect 402 until payment attached.",
   },
   routes: [
     {
@@ -146,7 +146,7 @@ dualDiscovery(app, dual, {
       tags: ["hello"],
       summary: "Paid greeting (canonical POST)",
       description:
-        "POST /hello with a JSON body { name }. Returns a greeting for $0.02.",
+        "POST /hello with a JSON body { name }. Returns a greeting for 0.02 USDC.",
       requestBodySchema: helloInputSchema,
       responseSchema: helloOutputSchema,
     },
@@ -157,7 +157,7 @@ dualDiscovery(app, dual, {
       operationId: "getHello",
       tags: ["hello"],
       summary: "Paid greeting (GET alias for curl/browsers)",
-      description: "GET /hello?name=world — query-string alias of POST /hello.",
+      description: "GET /hello?name=world. Query-string alias of POST /hello.",
       parameters: [
         {
           name: "name",

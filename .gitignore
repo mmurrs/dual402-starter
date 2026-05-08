@@ -1,0 +1,19 @@
+node_modules/
+dist/
+
+# Env files — always gitignored, never commit real secrets
+.env
+.env.*
+!.env.example
+
+# Local deploy state (wallet addresses, app IDs, etc)
+scripts/.deploy-config
+
+# Vercel
+.vercel/
+
+# Agent scratch
+CLAUDE.md
+
+# OS
+.DS_Store

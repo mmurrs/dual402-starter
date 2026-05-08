@@ -1,0 +1,26 @@
+{
+  "name": "dual402-starter",
+  "version": "0.1.0",
+  "description": "Starter template for paid APIs on EigenCompute. Accept both x402 (Base mainnet USDC) and MPP (Tempo USDC) on every route out of the box.",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --env-file=.env server.js",
+    "test": "node --test tests/smoke.mjs",
+    "init": "./scripts/init.sh",
+    "deploy": "./scripts/deploy.sh"
+  },
+  "dependencies": {
+    "dual-402": "github:mmurrs/dual-402#main",
+    "express": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mmurrs/dual402-starter.git"
+  }
+}

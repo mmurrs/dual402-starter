@@ -1,7 +1,8 @@
+import { pathToFileURL } from "node:url";
 import express from "express";
 import { createDual402, dualDiscovery } from "dual402";
 
-const app = express();
+export const app = express();
 const PORT = process.env.PORT || 8080;
 
 app.set("trust proxy", true);
@@ -172,19 +173,25 @@ dualDiscovery(app, dual, {
   ],
 });
 
-app.listen(PORT, () => {
+export function startServer(port = PORT) {
   const facilitatorHost = new URL(
     process.env.X402_FACILITATOR_URL ||
       "https://api.cdp.coinbase.com/platform/v2/x402",
   ).host;
-  console.log(
-    `[BOOT] ${process.env.SERVICE_NAME || "dual402-starter"} ` +
-      `commit=${process.env.GIT_SHA || "unknown"} ` +
-      `built=${process.env.BUILD_TIME || "unknown"} ` +
-      `port=${PORT} ` +
-      `x402=${process.env.X402_NETWORK || "eip155:8453"} ` +
-      `facilitator=${facilitatorHost} ` +
-      `cdp_auth=${process.env.CDP_API_KEY_ID && process.env.CDP_API_KEY_SECRET ? "configured" : "missing"} ` +
-      `mpp=${process.env.MPP_SECRET_KEY ? "configured" : "missing"}`,
-  );
-});
+  return app.listen(port, () => {
+    console.log(
+      `[BOOT] ${process.env.SERVICE_NAME || "dual402-starter"} ` +
+        `commit=${process.env.GIT_SHA || "unknown"} ` +
+        `built=${process.env.BUILD_TIME || "unknown"} ` +
+        `port=${port} ` +
+        `x402=${process.env.X402_NETWORK || "eip155:8453"} ` +
+        `facilitator=${facilitatorHost} ` +
+        `cdp_auth=${process.env.CDP_API_KEY_ID && process.env.CDP_API_KEY_SECRET ? "configured" : "missing"} ` +
+        `mpp=${process.env.MPP_SECRET_KEY ? "configured" : "missing"}`,
+    );
+  });
+}
+
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  startServer();
+}

@@ -1,4 +1,4 @@
-FROM node:20-slim
+FROM node:22-slim
 
 ARG GIT_SHA=unknown
 ARG BUILD_TIME=unknown

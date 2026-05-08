@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{SERVICE_NAME}}</title>
+    <meta name="description" content="{{TAGLINE}}" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta property="og:title" content="{{SERVICE_NAME}}" />
+    <meta property="og:description" content="{{TAGLINE}}" />
+    <style>
+      :root {
+        --bg: #0b0d10;
+        --fg: #e7e9ee;
+        --dim: #8b93a3;
+        --accent: #5ac8fa;
+        --card: #14171c;
+        --border: #20252d;
+        --mono: "JetBrains Mono", "SF Mono", Consolas, monospace;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family:
+          Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        background: var(--bg);
+        color: var(--fg);
+        line-height: 1.6;
+      }
+      .wrap { max-width: 780px; margin: 0 auto; padding: 64px 24px; }
+      header h1 {
+        font-size: 44px;
+        font-weight: 700;
+        margin: 0 0 8px;
+        letter-spacing: -0.02em;
+      }
+      header p.tag { font-size: 18px; color: var(--dim); margin: 0 0 32px; }
+      .pill {
+        display: inline-block;
+        padding: 4px 10px;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        font-family: var(--mono);
+        font-size: 12px;
+        color: var(--accent);
+      }
+      section { margin-top: 48px; }
+      h2 {
+        font-size: 20px;
+        font-weight: 600;
+        margin: 0 0 16px;
+        letter-spacing: -0.01em;
+      }
+      .card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 20px;
+      }
+      code {
+        font-family: var(--mono);
+        background: #0f1216;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 13px;
+        color: var(--accent);
+      }
+      pre {
+        font-family: var(--mono);
+        background: #0f1216;
+        padding: 16px;
+        border-radius: 8px;
+        overflow-x: auto;
+        font-size: 13px;
+        border: 1px solid var(--border);
+        margin: 12px 0;
+      }
+      a { color: var(--accent); text-decoration: none; }
+      a:hover { text-decoration: underline; }
+      ul { padding-left: 20px; }
+      li { margin: 4px 0; }
+      footer {
+        margin-top: 80px;
+        padding-top: 24px;
+        border-top: 1px solid var(--border);
+        color: var(--dim);
+        font-size: 13px;
+      }
+      footer a { color: var(--dim); }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <h1>{{SERVICE_NAME}}</h1>
+        <p class="tag">{{TAGLINE}}</p>
+        <span class="pill">{{PRICE}} per request</span>
+        &nbsp;<span class="pill">x402 + MPP</span>
+        &nbsp;<span class="pill">Verified on EigenCompute</span>
+      </header>
+
+      <section>
+        <h2>Quickstart</h2>
+        <div class="card">
+          <pre>npx agentcash add {{BASE_URL}}</pre>
+          <p>AgentCash handles both payment protocols. For protocol-specific clients, use <code>@x402/fetch</code> (x402) or <code>mppx</code> (MPP).</p>
+        </div>
+      </section>
+
+      <section>
+        <h2>Endpoints</h2>
+        <div class="card">
+          <ul>
+            <li><code>POST /hello</code> — {{ROUTE_SUMMARY}} ({{PRICE}})</li>
+            <li><code>GET /openapi.json</code> — full OpenAPI spec</li>
+            <li><code>GET /.well-known/x402</code> — x402 discovery fallback</li>
+            <li><code>GET /verify</code> — service identity + commit SHA</li>
+          </ul>
+        </div>
+      </section>
+
+      <section>
+        <h2>Example call</h2>
+        <pre>curl -sI {{BASE_URL}}/hello
+# HTTP/1.1 402 Payment Required
+# PAYMENT-REQUIRED: &lt;base64 x402 challenge&gt;
+# WWW-Authenticate: Payment id="..." method="tempo" ...</pre>
+      </section>
+
+      <section>
+        <h2>Verify this service</h2>
+        <div class="card">
+          <ul>
+            <li>Source: <a href="{{REPO_URL}}">{{REPO_URL}}</a></li>
+            <li>Build provenance: <a href="https://verify.eigencloud.xyz/app/{{APP_ID}}">verify.eigencloud.xyz</a></li>
+            <li>Live identity: <a href="{{BASE_URL}}/verify">{{BASE_URL}}/verify</a></li>
+          </ul>
+        </div>
+      </section>
+
+      <footer>
+        Built with
+        <a href="https://github.com/mmurrs/dual-402">dual-402</a>
+        &middot;
+        Deployed on
+        <a href="https://eigencloud.xyz">EigenCompute</a>
+        &middot;
+        Cloned from
+        <a href="https://github.com/mmurrs/dual402-starter">dual402-starter</a>
+      </footer>
+    </div>
+  </body>
+</html>

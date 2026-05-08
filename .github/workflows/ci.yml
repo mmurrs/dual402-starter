@@ -1,0 +1,59 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [20, 22]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+      - run: npm install
+      - run: npm test
+      - name: Validate server boots and serves 402
+        run: |
+          set -euo pipefail
+          cat > /tmp/ci.env <<EOF
+          SERVICE_NAME=ci-smoke
+          MPP_SECRET_KEY=$(node -e "console.log(require('crypto').randomBytes(32).toString('hex'))")
+          USDC_TEMPO=0x20C000000000000000000000b9537d11c60E8b50
+          RECIPIENT_WALLET=0x1111111111111111111111111111111111111111
+          X402_NETWORK=eip155:84532
+          X402_FACILITATOR_URL=https://x402.org/facilitator
+          PORT=8099
+          EOF
+          node --env-file=/tmp/ci.env server.js &
+          SERVER=$!
+          sleep 3
+          # GET must 402 with both headers
+          HEADERS=$(curl -sI http://127.0.0.1:8099/hello?name=alice || true)
+          echo "$HEADERS"
+          echo "$HEADERS" | grep -iq "^HTTP/1.1 402"
+          echo "$HEADERS" | grep -iq "^payment-required:"
+          echo "$HEADERS" | grep -iq "^www-authenticate:"
+          # /verify must return JSON with expected top-level keys
+          curl -sS http://127.0.0.1:8099/verify | node -e "
+          let s=''; process.stdin.on('data',c=>s+=c).on('end',()=>{
+            const d=JSON.parse(s);
+            for (const k of ['service','code','runtime','payment','framework']) {
+              if (!(k in d)) { console.error('missing',k); process.exit(1); }
+            }
+            console.log('verify ok');
+          })"
+          # /openapi.json must expose /hello
+          curl -sS http://127.0.0.1:8099/openapi.json | node -e "
+          let s=''; process.stdin.on('data',c=>s+=c).on('end',()=>{
+            const d=JSON.parse(s);
+            if (!d.paths || !d.paths['/hello']) { console.error('missing /hello path'); process.exit(1); }
+            console.log('openapi ok');
+          })"
+          kill $SERVER

@@ -1,5 +1,5 @@
 import express from "express";
-import { createDual402, dualDiscovery } from "dual-402";
+import { createDual402, dualDiscovery } from "dual402";
 
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -124,7 +124,7 @@ app.get("/verify", (req, res) => {
         payee: process.env.MPP_RECIPIENT || RECIPIENT || null,
       },
     },
-    framework: { name: "dual-402", homepage: "https://github.com/mmurrs/dual-402" },
+    framework: { name: "dual402", homepage: "https://github.com/mmurrs/dual402" },
   });
 });
 

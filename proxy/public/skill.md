@@ -49,5 +49,5 @@ curl -sI {{BASE_URL}}/hello
 - OpenAPI: {{BASE_URL}}/openapi.json
 - x402 discovery: {{BASE_URL}}/.well-known/x402
 - Source: {{REPO_URL}}
-- Framework: https://github.com/mmurrs/dual-402 (the dual x402+MPP middleware)
+- Framework: https://github.com/mmurrs/dual402 (the dual x402+MPP middleware)
 - Starter: https://github.com/mmurrs/dual402-starter (what this service was cloned from)

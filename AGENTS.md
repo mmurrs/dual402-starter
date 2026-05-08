@@ -8,7 +8,7 @@ A GitHub template for shipping paid APIs on **EigenCompute** that accept both:
 - **x402** (Base mainnet USDC, via Coinbase CDP facilitator)
 - **MPP** (Tempo USDC, via mppx)
 
-on every route, out of the box. Built on [`mmurrs/dual-402`](https://github.com/mmurrs/dual-402).
+on every route, out of the box. Built on [`mmurrs/dual402`](https://github.com/mmurrs/dual402).
 
 ## What you'll be asked to do
 
@@ -33,7 +33,7 @@ All three must match. `/openapi.json` is generated from the `routes: [...]` arra
 
 ### Schema vs example
 
-In OpenAPI `responseSchema`, pass a JSON Schema. The `extensions.bazaar.info.output.example` that gets emitted in the 402 challenge should be a **concrete example response object**, not another schema. dual-402 handles this correctly when you pass `responseSchema` — don't hand-author `extensions.bazaar`.
+In OpenAPI `responseSchema`, pass a JSON Schema. The `extensions.bazaar.info.output.example` that gets emitted in the 402 challenge should be a **concrete example response object**, not another schema. dual402 handles this correctly when you pass `responseSchema` — don't hand-author `extensions.bazaar`.
 
 ### ASCII-only in route descriptions
 
@@ -53,7 +53,7 @@ Paid route bodies contain signed `PAYMENT-SIGNATURE` / `Authorization: Payment .
 
 ## Production gotchas (prevented by starter defaults; do not regress)
 
-1. **`extra.name` for USDC must be `"USD Coin"`, not `"USDC"`.** Base mainnet USDC's EIP-712 domain uses the contract's on-chain `name()` which returns `"USD Coin"`. Wrong name → wrong domain separator → signature reverts on verify. `dual-402` defaults correctly; don't override.
+1. **`extra.name` for USDC must be `"USD Coin"`, not `"USDC"`.** Base mainnet USDC's EIP-712 domain uses the contract's on-chain `name()` which returns `"USD Coin"`. Wrong name → wrong domain separator → signature reverts on verify. `dual402` defaults correctly; don't override.
 2. **Merchant wallet ≠ tester wallet.** CDP facilitator rejects self-transfers as `invalid_payload`. `scripts/init.sh` generates a fresh wallet on purpose. Never reuse your AgentCash or personal wallet as `RECIPIENT_WALLET`.
 3. **Base mainnet facilitator is CDP, not x402.org.** `X402_FACILITATOR_URL` defaults to `https://api.cdp.coinbase.com/platform/v2/x402`. `x402.org/facilitator` is Sepolia-only.
 4. **CDP keys are required on mainnet.** Without `CDP_API_KEY_ID` + `CDP_API_KEY_SECRET`, every `/verify` returns 401, clients loop at 402. Boot log shows `cdp_auth=configured` when set correctly.
@@ -103,7 +103,7 @@ If any field is wrong or missing, **do not deploy to production** until fixed.
 
 ## Further reading
 
-- Library: https://github.com/mmurrs/dual-402 — architecture, protocol details, middleware internals
+- Library: https://github.com/mmurrs/dual402 — architecture, protocol details, middleware internals
 - This template: https://github.com/mmurrs/dual402-starter
 - EigenCompute verify dashboard: https://verify.eigencloud.xyz
 - x402 spec: https://github.com/coinbase/x402

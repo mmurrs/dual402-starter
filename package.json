@@ -12,7 +12,7 @@
     "deploy": "./scripts/deploy.sh"
   },
   "dependencies": {
-    "dual-402": "github:mmurrs/dual-402#main",
+    "dual402": "github:mmurrs/dual402#main",
     "express": "^5.0.0"
   },
   "engines": {

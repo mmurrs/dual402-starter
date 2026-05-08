@@ -2,7 +2,21 @@
 
 Paid HTTP API template for AI agents. Accepts both **x402** (Base mainnet USDC) and **MPP** (Tempo USDC) on every route. Deploys to **EigenCompute** with a verifiable build.
 
-Built on [`dual-402`](https://github.com/mmurrs/dual-402).
+Built on [`dual402`](https://github.com/mmurrs/dual402).
+
+## Why use this
+
+Your service gets monetized automatically. No API keys, no billing dashboard, no user accounts — every paid route returns a 402 challenge and the client pays per call in USDC. You set the price per endpoint; you get paid per request to your own wallet. Both x402 (Coinbase) and MPP (Tempo) clients just work on day one, so you don't have to pick a side.
+
+On top of that, deploying on EigenCompute gives agents and counterparties something they can't get from AWS or Vercel:
+
+- **Source code verifiability.** The running binary is cryptographically linked to a specific commit in your public repo. Agents can audit exactly what they're paying.
+- **Public attestations.** `[BOOT]` log, `/verify` endpoint, and `verify.eigencloud.xyz` dashboard expose commit SHA, facilitator, and payee wallet as third-party-auditable proof.
+- **Agent commerce primitives.** Your service pays for its own compute, inference, and upstream tool calls (x402/MPP, onchain), with every settlement logged and traceable.
+- **Encrypted memory.** TEE-sealed secrets (CDP keys, upstream API keys) are released only to the measured boot image — your code can read them, no one else can.
+- **Programmatic payouts.** Funds move on rules the counterparty can inspect: fixed per-request price, verifiable settlement hash, fresh merchant wallet scoped to the service.
+
+If you'd be fine on AWS, you probably don't need this. If your service needs to prove to an agent or counterparty that the code charging them is exactly what's on GitHub, this is the fastest path.
 
 ## Quickstart
 
@@ -31,7 +45,7 @@ gh repo create <user>/my-api --public --source=. --push
 ## What you get out of the box
 
 - Express server with a `/hello` paid route ($0.02 per call) — replace with your own routes
-- Dual x402 + MPP middleware via [`dual-402`](https://github.com/mmurrs/dual-402)
+- Dual x402 + MPP middleware via [`dual402`](https://github.com/mmurrs/dual402)
 - Auto-generated `/openapi.json` and `/.well-known/x402` discovery
 - `/verify` endpoint returning commit SHA, app ID, payee addresses — agent-friendly auditability
 - `Dockerfile` with build-time `GIT_SHA` / `BUILD_TIME` args baked into the boot log
@@ -83,7 +97,7 @@ Critical defaults that prevent hours of debugging:
 
 1. **Fresh merchant wallet, always.** `init.sh` generates one. Never reuse your AgentCash/personal wallet — CDP rejects self-transfers with `invalid_payload`.
 2. **Base mainnet needs CDP auth.** The default `X402_FACILITATOR_URL` is CDP's mainnet endpoint. `x402.org/facilitator` is Sepolia-only.
-3. **EIP-712 name is `"USD Coin"`, not `"USDC"`.** Handled in `dual-402`. Don't override.
+3. **EIP-712 name is `"USD Coin"`, not `"USDC"`.** Handled in `dual402`. Don't override.
 4. **Dockerfile `COPY` uses CWD as build context.** `deploy.sh` always `cd`s to the repo root.
 5. **Vercel proxy MUST have `bodyParser: false`.** Included — don't remove.
 6. **Use your GitHub remote's HTTPS URL.** `deploy.sh` normalizes `git@` to `https://` for ecloud.
@@ -104,4 +118,4 @@ tests/smoke.mjs        Offline smoke (`npm test`)
 
 MIT — see [LICENSE](./LICENSE).
 
-Built with [`dual-402`](https://github.com/mmurrs/dual-402) · Deployed on [EigenCompute](https://eigencloud.xyz).
+Built with [`dual402`](https://github.com/mmurrs/dual402) · Deployed on [EigenCompute](https://eigencloud.xyz).

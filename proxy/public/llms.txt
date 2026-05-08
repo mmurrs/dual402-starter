@@ -59,4 +59,4 @@ Examples of queries where this service should fire:
 - x402 discovery: {{BASE_URL}}/.well-known/x402
 - Verify: {{BASE_URL}}/verify
 - Source: {{REPO_URL}}
-- Framework: https://github.com/mmurrs/dual-402
+- Framework: https://github.com/mmurrs/dual402

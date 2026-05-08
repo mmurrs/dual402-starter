@@ -2,7 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 
 // Minimal offline smoke — can we at least import the package and boot the
-// middleware with mock env? Fuller dual-402 smokes live in mmurrs/dual-402.
+// middleware with mock env? Fuller dual402 smokes live in mmurrs/dual402.
 
 test("server module loads with mock env", async () => {
   process.env.MPP_SECRET_KEY = "0".repeat(64);
@@ -13,7 +13,7 @@ test("server module loads with mock env", async () => {
   process.env.PORT = "0"; // don't actually bind
 
   // We only verify the import chain works — skip actually listening.
-  const { createDual402, dualDiscovery } = await import("dual-402");
+  const { createDual402, dualDiscovery } = await import("dual402");
   assert.equal(typeof createDual402, "function");
   assert.equal(typeof dualDiscovery, "function");
 

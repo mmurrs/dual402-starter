@@ -13,6 +13,13 @@ CONFIG=".deploy-config"
 ENVIRONMENT="${ENVIRONMENT:-mainnet-alpha}"
 INSTANCE_TYPE="${INSTANCE_TYPE:-g1-micro-1v}"
 
+# Derive app name from SERVICE_NAME in the env file (fallback to repo dir)
+APP_NAME="${APP_NAME:-}"
+if [[ -z "$APP_NAME" && -f "$ENV_FILE" ]]; then
+  APP_NAME="$(grep -E '^SERVICE_NAME=' "$ENV_FILE" | head -1 | cut -d= -f2-)"
+fi
+APP_NAME="${APP_NAME:-$(basename "$(pwd)")}"
+
 [[ -f "$ENV_FILE" ]] || { echo "FATAL: $ENV_FILE missing. Run ./scripts/init.sh first." >&2; exit 1; }
 command -v ecloud >/dev/null 2>&1 || { echo "FATAL: ecloud CLI not found. Install: npm install -g @layr-labs/ecloud-cli@dev" >&2; exit 1; }
 command -v gh >/dev/null 2>&1 || { echo "FATAL: gh CLI not found." >&2; exit 1; }
@@ -88,8 +95,9 @@ if [[ "$MODE" == "upgrade" ]]; then
       [[ $status -eq 141 ]] || exit $status  # harmless SIGPIPE from yes-pipe
     }
 else
-  echo "Creating new app on $ENVIRONMENT from $REPO_URL @ $COMMIT..."
+  echo "Creating new app '$APP_NAME' on $ENVIRONMENT from $REPO_URL @ $COMMIT..."
   ecloud compute app deploy \
+    --name "$APP_NAME" \
     --environment "$ENVIRONMENT" \
     --verifiable \
     --repo "$REPO_URL" \

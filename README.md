@@ -2,9 +2,9 @@
 
 Paid HTTP API template. Accepts x402 and MPP on every route. Deploys verifiably on EigenCompute.
 
-Clone → `./scripts/init.sh` → fill CDP keys → `./scripts/deploy.sh --fresh`. Zero to live paid API in under 10 min.
+Clone → `./scripts/init.sh` → `./scripts/deploy.sh --fresh`. Zero to live paid API in under 10 min.
 
-Built on [`dual402`](https://github.com/mmurrs/dual402).
+Built on [`dual402`](https://github.com/mmurrs/dual402). Protocol references: [x402.org](https://x402.org) · [mpp.dev](https://mpp.dev).
 
 ## Why use this
 

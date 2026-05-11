@@ -3,38 +3,46 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{{SERVICE_NAME}}</title>
-    <meta name="description" content="{{TAGLINE}}" />
+    <title>Paid API on EigenCompute</title>
+    <meta name="description" content="A paid HTTP API accepting x402 and MPP on every route, verifiably deployed on EigenCompute." />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta property="og:title" content="{{SERVICE_NAME}}" />
-    <meta property="og:description" content="{{TAGLINE}}" />
     <style>
       :root {
         --bg: #0b0d10;
         --fg: #e7e9ee;
         --dim: #8b93a3;
+        --dim-2: #5c6475;
         --accent: #5ac8fa;
+        --good: #4ade80;
+        --warn: #fbbf24;
+        --bad: #f87171;
         --card: #14171c;
         --border: #20252d;
         --mono: "JetBrains Mono", "SF Mono", Consolas, monospace;
       }
       * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
       body {
-        margin: 0;
-        font-family:
-          Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         background: var(--bg);
         color: var(--fg);
-        line-height: 1.6;
+        line-height: 1.55;
+        -webkit-font-smoothing: antialiased;
       }
-      .wrap { max-width: 780px; margin: 0 auto; padding: 64px 24px; }
+      .wrap { max-width: 820px; margin: 0 auto; padding: 56px 24px 96px; }
       header h1 {
-        font-size: 44px;
+        font-size: 40px;
         font-weight: 700;
         margin: 0 0 8px;
         letter-spacing: -0.02em;
       }
-      header p.tag { font-size: 18px; color: var(--dim); margin: 0 0 32px; }
+      header p.tag {
+        font-size: 17px;
+        color: var(--dim);
+        margin: 0 0 28px;
+        max-width: 60ch;
+      }
+      header .pills { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 40px; }
       .pill {
         display: inline-block;
         padding: 4px 10px;
@@ -43,20 +51,32 @@
         font-family: var(--mono);
         font-size: 12px;
         color: var(--accent);
+        white-space: nowrap;
       }
-      section { margin-top: 48px; }
+      .pill.good { color: var(--good); border-color: #1f3d2a; }
+      .pill.warn { color: var(--warn); border-color: #3d2f1f; }
+      .pill.bad  { color: var(--bad);  border-color: #3d1f1f; }
+      section { margin-top: 40px; }
       h2 {
-        font-size: 20px;
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
         font-weight: 600;
-        margin: 0 0 16px;
-        letter-spacing: -0.01em;
+        color: var(--dim);
+        margin: 0 0 14px;
       }
       .card {
         background: var(--card);
         border: 1px solid var(--border);
         border-radius: 12px;
-        padding: 20px;
+        padding: 20px 22px;
       }
+      .kv { display: grid; grid-template-columns: 150px 1fr; gap: 8px 16px; font-size: 14px; }
+      .kv dt { color: var(--dim); font-weight: 400; }
+      .kv dd { margin: 0; font-family: var(--mono); font-size: 13px; word-break: break-all; }
+      .kv a { color: var(--accent); text-decoration: none; }
+      .kv a:hover { text-decoration: underline; }
+      .muted { color: var(--dim-2); font-style: italic; }
       code {
         font-family: var(--mono);
         background: #0f1216;
@@ -68,86 +88,263 @@
       pre {
         font-family: var(--mono);
         background: #0f1216;
-        padding: 16px;
+        padding: 14px 16px;
         border-radius: 8px;
         overflow-x: auto;
         font-size: 13px;
         border: 1px solid var(--border);
         margin: 12px 0;
+        color: var(--fg);
       }
+      .routes { display: flex; flex-direction: column; gap: 10px; }
+      .route {
+        display: flex; align-items: baseline; gap: 12px;
+        padding: 10px 12px;
+        background: #0f1216;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        font-family: var(--mono);
+        font-size: 13px;
+      }
+      .route .method {
+        font-weight: 600;
+        color: var(--good);
+        min-width: 52px;
+      }
+      .route .method.POST { color: #c084fc; }
+      .route .path { color: var(--fg); flex: 1; }
+      .route .price { color: var(--dim); }
+      .route .desc { flex-basis: 100%; color: var(--dim); font-family: Inter, sans-serif; font-size: 12px; margin-top: 4px; }
       a { color: var(--accent); text-decoration: none; }
       a:hover { text-decoration: underline; }
-      ul { padding-left: 20px; }
-      li { margin: 4px 0; }
       footer {
         margin-top: 80px;
         padding-top: 24px;
         border-top: 1px solid var(--border);
         color: var(--dim);
         font-size: 13px;
+        display: flex; flex-wrap: wrap; gap: 20px;
       }
       footer a { color: var(--dim); }
+      .error-card {
+        background: #1a0f0f;
+        border-color: #3d1f1f;
+        color: var(--bad);
+        font-family: var(--mono);
+        font-size: 13px;
+      }
     </style>
   </head>
   <body>
     <div class="wrap">
       <header>
-        <h1>{{SERVICE_NAME}}</h1>
-        <p class="tag">{{TAGLINE}}</p>
-        <span class="pill">{{PRICE}} per request</span>
-        &nbsp;<span class="pill">x402 + MPP</span>
-        &nbsp;<span class="pill">Verified on EigenCompute</span>
+        <h1 id="service-name">Paid API on EigenCompute</h1>
+        <p class="tag" id="service-desc">A paid HTTP API accepting x402 and MPP on every route, verifiably deployed on EigenCompute.</p>
+        <div class="pills" id="status-pills">
+          <span class="pill" id="pill-x402">x402</span>
+          <span class="pill" id="pill-mpp">MPP</span>
+          <span class="pill" id="pill-verified">Verifiable build</span>
+          <span class="pill" id="pill-env">mainnet-alpha</span>
+        </div>
       </header>
 
       <section>
-        <h2>Quickstart</h2>
-        <div class="card">
-          <pre>npx agentcash add {{BASE_URL}}</pre>
-          <p>AgentCash handles both payment protocols. For protocol-specific clients, use <code>@x402/fetch</code> (x402) or <code>mppx</code> (MPP).</p>
+        <h2>Identity</h2>
+        <div class="card" id="identity-card">
+          <dl class="kv" id="identity-kv">
+            <dt>Loading…</dt><dd class="muted">fetching /verify</dd>
+          </dl>
         </div>
       </section>
 
       <section>
         <h2>Endpoints</h2>
-        <div class="card">
-          <ul>
-            <li><code>POST /hello</code> — {{ROUTE_SUMMARY}} ({{PRICE}})</li>
-            <li><code>GET /openapi.json</code> — full OpenAPI spec</li>
-            <li><code>GET /.well-known/x402</code> — x402 discovery fallback</li>
-            <li><code>GET /verify</code> — service identity + commit SHA</li>
-          </ul>
+        <div id="endpoints">
+          <div class="card"><span class="muted">Loading /openapi.json…</span></div>
         </div>
       </section>
 
       <section>
-        <h2>Example call</h2>
-        <pre>curl -sI {{BASE_URL}}/hello
-# HTTP/1.1 402 Payment Required
-# PAYMENT-REQUIRED: &lt;base64 x402 challenge&gt;
-# WWW-Authenticate: Payment id="..." method="tempo" ...</pre>
+        <h2>Pay this API</h2>
+        <div class="card">
+          <p style="margin: 0 0 12px; color: var(--dim); font-size: 14px;">Any compliant client works. One-liner with AgentCash:</p>
+          <pre>npx agentcash add <span id="origin-inline">your-origin</span></pre>
+          <p style="margin: 12px 0 0; color: var(--dim); font-size: 13px;">Protocol-specific clients: <code>@x402/fetch</code> (x402) · <code>mppx</code> (MPP).</p>
+        </div>
       </section>
 
       <section>
-        <h2>Verify this service</h2>
+        <h2>Proof</h2>
         <div class="card">
-          <ul>
-            <li>Source: <a href="{{REPO_URL}}">{{REPO_URL}}</a></li>
-            <li>Build provenance: <a href="https://verify.eigencloud.xyz/app/{{APP_ID}}">verify.eigencloud.xyz</a></li>
-            <li>Live identity: <a href="{{BASE_URL}}/verify">{{BASE_URL}}/verify</a></li>
-          </ul>
+          <dl class="kv" id="proof-kv">
+            <dt>Loading…</dt><dd class="muted">fetching /verify</dd>
+          </dl>
         </div>
       </section>
 
       <footer>
-        Built with
-        <a href="https://github.com/mmurrs/dual402">dual-402</a>
-        &middot;
-        Deployed on
-        <a href="https://eigencloud.xyz">EigenCompute</a>
-        &middot;
-        Cloned from
-        <a href="https://github.com/mmurrs/dual402-starter">dual402-starter</a>
+        <span>Built with <a href="https://github.com/mmurrs/dual402">dual402</a></span>
+        <span>Deployed on <a href="https://eigencloud.xyz">EigenCompute</a></span>
+        <span>Cloned from <a href="https://github.com/mmurrs/dual402-starter">dual402-starter</a></span>
       </footer>
     </div>
+
+    <script>
+      const origin = location.origin;
+      document.getElementById("origin-inline").textContent = origin;
+
+      function short(hex, head = 6, tail = 4) {
+        if (!hex || hex.length <= head + tail + 3) return hex || "—";
+        return hex.slice(0, head) + "…" + hex.slice(-tail);
+      }
+
+      function baseScanUrl(addr) {
+        return addr ? `https://basescan.org/address/${addr}` : "#";
+      }
+
+      function fmtKV(dl, pairs) {
+        dl.innerHTML = "";
+        for (const [label, value, href] of pairs) {
+          const dt = document.createElement("dt");
+          dt.textContent = label;
+          const dd = document.createElement("dd");
+          if (href) {
+            const a = document.createElement("a");
+            a.href = href;
+            a.target = "_blank";
+            a.rel = "noopener";
+            a.textContent = value;
+            dd.appendChild(a);
+          } else {
+            dd.textContent = value;
+          }
+          dl.appendChild(dt);
+          dl.appendChild(dd);
+        }
+      }
+
+      function renderError(elId, msg) {
+        const el = document.getElementById(elId);
+        el.innerHTML = `<div class="card error-card">${msg}</div>`;
+      }
+
+      async function fetchVerify() {
+        try {
+          const r = await fetch("/verify", { cache: "no-store" });
+          if (!r.ok) throw new Error(`/verify returned ${r.status}`);
+          return await r.json();
+        } catch (err) {
+          console.error("fetchVerify", err);
+          return null;
+        }
+      }
+
+      async function fetchOpenAPI() {
+        try {
+          const r = await fetch("/openapi.json", { cache: "no-store" });
+          if (!r.ok) throw new Error(`/openapi.json returned ${r.status}`);
+          return await r.json();
+        } catch (err) {
+          console.error("fetchOpenAPI", err);
+          return null;
+        }
+      }
+
+      function renderIdentity(v) {
+        if (!v) {
+          renderError("identity-card", "Could not reach /verify. The backend may be warming up or down.");
+          return;
+        }
+        document.getElementById("service-name").textContent = v.service?.name || "Paid API";
+        const pills = document.getElementById("status-pills");
+        pills.querySelector("#pill-env").textContent = v.runtime?.environment || "unknown";
+
+        const repoHref = v.code?.repo || null;
+        const appDashboard = v.runtime?.app_id
+          ? `https://verify.eigencloud.xyz/app/${v.runtime.app_id}`
+          : null;
+        const payeeX402 = v.payment?.x402?.payee;
+
+        const dl = document.getElementById("identity-kv");
+        fmtKV(dl, [
+          ["Service", `${v.service?.name || "?"} @ ${v.service?.version || "?"}`],
+          ["Commit", v.code?.commit ? short(v.code.commit) : "unknown", repoHref ? `${repoHref}/tree/${v.code.commit}` : null],
+          ["Built", v.code?.built_at || "unknown"],
+          ["App ID", v.runtime?.app_id ? short(v.runtime.app_id, 6, 6) : "—", appDashboard],
+          ["Environment", v.runtime?.environment || "—"],
+          ["x402 network", v.payment?.x402?.network || "—"],
+          ["x402 facilitator", v.payment?.x402?.facilitator || "—"],
+          ["x402 payee", payeeX402 ? short(payeeX402, 6, 6) : "—", baseScanUrl(payeeX402)],
+          ["MPP rail", v.payment?.mpp?.rail || "—"],
+          ["MPP payee", v.payment?.mpp?.payee ? short(v.payment.mpp.payee, 6, 6) : "—", baseScanUrl(v.payment?.mpp?.payee)],
+        ]);
+      }
+
+      function renderEndpoints(spec) {
+        const container = document.getElementById("endpoints");
+        if (!spec || !spec.paths) {
+          container.innerHTML = `<div class="card error-card">Could not reach /openapi.json.</div>`;
+          return;
+        }
+        const rows = [];
+        for (const [path, methods] of Object.entries(spec.paths)) {
+          for (const [method, op] of Object.entries(methods)) {
+            if (typeof op !== "object" || !op) continue;
+            const amount = op["x-payment-info"]?.price || op.summary?.match(/\$[\d.]+/)?.[0] || "";
+            rows.push({ method: method.toUpperCase(), path, op, amount });
+          }
+        }
+        if (rows.length === 0) {
+          container.innerHTML = `<div class="card"><span class="muted">No paid routes declared yet.</span></div>`;
+          return;
+        }
+        const card = document.createElement("div");
+        card.className = "card";
+        const list = document.createElement("div");
+        list.className = "routes";
+        for (const r of rows) {
+          const row = document.createElement("div");
+          row.className = "route";
+          row.innerHTML = `
+            <span class="method ${r.method}">${r.method}</span>
+            <span class="path">${r.path}</span>
+            <span class="price">${r.amount || ""}</span>
+            <span class="desc">${r.op.summary || r.op.description || ""}</span>
+          `;
+          list.appendChild(row);
+        }
+        card.appendChild(list);
+        container.innerHTML = "";
+        container.appendChild(card);
+      }
+
+      function renderProof(v) {
+        if (!v) {
+          renderError("proof-kv", "No proof available — backend unreachable.");
+          return;
+        }
+        const appDashboard = v.runtime?.app_id
+          ? `https://verify.eigencloud.xyz/app/${v.runtime.app_id}`
+          : null;
+        const repoHref = v.code?.repo || null;
+        const payeeX402 = v.payment?.x402?.payee;
+        const dl = document.getElementById("proof-kv");
+        fmtKV(dl, [
+          ["Source", repoHref ? "open on GitHub" : "—", repoHref],
+          ["Provenance", appDashboard ? "verify.eigencloud.xyz" : "—", appDashboard],
+          ["Payouts", payeeX402 ? "live on Basescan" : "—", baseScanUrl(payeeX402)],
+          ["Live identity", "/verify", "/verify"],
+          ["OpenAPI", "/openapi.json", "/openapi.json"],
+          ["x402 discovery", "/.well-known/x402", "/.well-known/x402"],
+        ]);
+      }
+
+      (async () => {
+        const [verify, spec] = await Promise.all([fetchVerify(), fetchOpenAPI()]);
+        renderIdentity(verify);
+        renderEndpoints(spec);
+        renderProof(verify);
+      })();
+    </script>
   </body>
 </html>

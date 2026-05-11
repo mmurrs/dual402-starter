@@ -6,6 +6,14 @@ Clone → `./scripts/init.sh` → `./scripts/deploy.sh --fresh`. Zero to live pa
 
 Built on [`dual402`](https://github.com/mmurrs/dual402). Protocol references: [x402.org](https://x402.org) · [mpp.dev](https://mpp.dev).
 
+## Quick prompt
+
+Hand this to your coding agent and it can take it from here:
+
+```
+Read github.com/mmurrs/dual402-starter and build a paid API on EigenCompute that accepts both x402 and MPP.
+```
+
 ## Why use this
 
 Your service gets monetized automatically — no API keys, no billing dashboard, no accounts. Every paid route returns a 402; the client pays per call in USDC to your own wallet. Both x402 (Coinbase) and MPP (Tempo) clients work on day one.

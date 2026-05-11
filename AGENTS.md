@@ -2,6 +2,8 @@
 
 This file gives coding agents (Claude Code, Cursor, Codex, Aider, etc.) the context they need to be useful in this repo. Model-agnostic — read top to bottom on first visit.
 
+> **Update after learnings or mistakes.** When a correction, new convention, or hard-won lesson emerges during development, append it to the **Learned** section below. This file should grow as the repo does.
+
 ## What this repo is
 
 A GitHub template for shipping paid APIs on **EigenCompute** that accept both:
@@ -100,6 +102,16 @@ If any field is wrong or missing, **do not deploy to production** until fixed.
 - Don't log payment bodies or headers that contain signed authorizations.
 - Don't override `extra.name` or the default facilitator URL without a specific reason.
 - Don't commit `.env.mainnet`, `scripts/.deploy-config`, `scripts/.merchant-privkey`, or `CLAUDE.md`. All gitignored.
+
+## Learned
+
+Accumulating list of things actually hit in practice. Append to this section when something new gets burned into the codebase so future agents skip the same debug cycle. Oldest first.
+
+- **2026-05-08 — em-dash in route `description` crashes mppx.** `dual.charge({ description: "... — ..." })` flows into the `WWW-Authenticate` HTTP header, which is ByteString (≤ U+00FF). Em-dash (`—`, U+2014) throws `TypeError: Cannot convert argument to a ByteString`. Stick to ASCII.
+- **2026-05-08 — `ecloud compute app deploy --name <foo>` is silently ignored.** Apps show as `(unnamed)` in `app info` and on `verify.eigencloud.xyz`. Workaround: after deploy, run `ecloud compute app profile set <APP_ID> --name <foo> --description <...> --website <...> --environment mainnet-alpha`. This is an on-chain profile update (costs a few gwei). `deploy.sh --fresh` already does this automatically.
+- **2026-05-08 — `Logs not yet available` (HTTP 425) for ~60–90s after Status: Running.** Normal. Wait, then re-poll. Don't interpret as a bad deploy.
+- **2026-05-08 — verifiable build can fail "Failed to verify provenance" on first attempt.** Retry with a different commit SHA (trivial no-op commit or pull a rebase). Usually transient; the provenance cache sometimes gets stuck on a rejected attestation.
+- **2026-05-10 — `npm test` passing a directory to `node --test` requires Node 24+.** On Node 22 it errors `MODULE_NOT_FOUND`. Use explicit globs: `node --test tests/*.test.mjs`.
 
 ## Further reading
 
